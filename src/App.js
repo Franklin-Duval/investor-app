@@ -1,25 +1,32 @@
-import logo from './logo.svg';
 import './App.css';
+import 'antd/dist/antd.css'
+
+import { Route, Switch, BrowserRouter } from 'react-router-dom'
+
+import Home from './components/layouts/home'
+import Login from './components/layouts/login'
+import Register from './components/layouts/register'
+
+/* import AdminRoutes from './components/admin/routes'
+import TechnicienRoutes from './components/technicien/routes'
+import UserRoutes from './components/user/routes' */
+
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	return (
+		<BrowserRouter>
+			<Switch>
+				<Route exact path="/" component={Home} />
+				<Route path="/login" component={Login} />
+				<Route path="/register" component={Register} />
+				
+				{/* <Route path="/admin" render={() => <AdminRoutes/>} />
+				<Route path="/user" render={() => <UserRoutes/>} />
+				<Route path="/technicien" render={() => <TechnicienRoutes/>} /> */}
+				
+			</Switch>
+		</BrowserRouter>
+	);
 }
 
 export default App;
