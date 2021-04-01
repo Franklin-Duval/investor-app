@@ -1,0 +1,49 @@
+.navbar{
+	background-image: linear-gradient(to right, #66bb6a, #66bb6a);
+}
+
+.navbar-nav li{
+	padding: 0 10px;
+	margin-top: 5px;
+}
+
+.navbar-nav li a{
+	color: #fff !important;
+	float: right;
+	text-align: left;
+}
+
+@media screen and (max-width: 991.5px){
+	.profile{
+		margin-left: 94%;
+		margin-right: 15px;
+	}
+}
+
+@media screen and (max-width: 845px){
+	.profile{
+		margin-left: 93.5%;
+		margin-right: 15px;
+	}
+}
+
+@media screen and (max-width: 640px){
+	.profile{
+		margin-left: 92%;
+		margin-right: 15px;
+	}
+}
+
+@media screen and (max-width: 450px){
+	.profile{
+		margin-left: 87%;
+		margin-right: 15px;
+	}
+}
+
+@media screen and (max-width: 360px){
+	.profile{
+		margin-left: 85%;
+		margin-right: 15px;
+	}
+}

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 
+import Navigation from './navigation_bar'
 import '../../assets/css/home.css'
 import logo from '../../assets/images/logo.PNG'
 import home from '../../assets/images/home2.svg'
@@ -9,6 +10,7 @@ export default class Home extends Component {
     render() {
         return (
             <div>
+                <Navigation />
                 <div className="home">
                     <div className="container-fluid">
                         <div className="row">

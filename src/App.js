@@ -7,9 +7,9 @@ import Home from './components/layouts/home'
 import Login from './components/layouts/login'
 import Register from './components/layouts/register'
 
-/* import AdminRoutes from './components/admin/routes'
-import TechnicienRoutes from './components/technicien/routes'
-import UserRoutes from './components/user/routes' */
+import PorteurRoutes from './components/porteur_projet/routes'
+import AdminRoutes from './components/admin/routes'
+import InvestisseurRoutes from './components/investisseur/routes'
 
 
 function App() {
@@ -20,9 +20,9 @@ function App() {
 				<Route path="/login" component={Login} />
 				<Route path="/register" component={Register} />
 				
-				{/* <Route path="/admin" render={() => <AdminRoutes/>} />
-				<Route path="/user" render={() => <UserRoutes/>} />
-				<Route path="/technicien" render={() => <TechnicienRoutes/>} /> */}
+				<Route path="/porteur" render={() => <PorteurRoutes/>} />
+				<Route path="/admin" render={() => <AdminRoutes/>} />
+				<Route path="/investisseur" render={() => <InvestisseurRoutes/>} />
 				
 			</Switch>
 		</BrowserRouter>
