@@ -4,13 +4,15 @@ import { FaUserCircle } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 
 import '../../assets/css/navigation.css'
+import { connect } from 'react-redux'
+import { createUser } from '../../redux/actions/action'
 
-export default class Navigation extends React.Component{
+class Navigation extends React.Component{
 
     render(){
         return(
             <nav className="navbar sticky-top navbar-expand-lg navbar-dark bg-primary">
-                <Link to="/" className="row">
+                <Link to="/" className="row" style={{textDecoration: 'none'}}>
                     <img src={logo} alt="logo" style={styles.image} />
                     <p style={styles.text} >Greenwood Solution</p>
                 </Link>
@@ -28,12 +30,32 @@ export default class Navigation extends React.Component{
 
                         <li className="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show"><Link to="/" style={styles.text} >Contact</Link></li>
 
-                        <div style={{flex: 1, display: 'flex', justifyContent: 'flex-end',}}>
-                            <FaUserCircle color="white" size={40} />
-                            <p style={{fontFamily: 'Tauri', fontSize: 16, color: 'white', marginLeft: 10, textAlign: 'center', marginTop: 5}}>
-                                Franklin Duval
-                            </p>
-                        </div>
+                        {
+                            this.props.user.authentifie &&
+                            (
+                            <Link style={{flex: 1, display: 'flex', justifyContent: 'flex-end',}}
+                                onClick={() => {
+                                    this.props.save_user({
+                                        authentifie: false,
+                                        userType: "",
+                                        id: "",
+                                        nom: "",
+                                        prenom: "",
+                                        email: "",
+                                        url: ""
+                                    })
+                                }}
+                                to="/login"
+                            >
+                                <FaUserCircle color="white" size={40} />
+                                <p data-toggle="tooltip" data-html="true" title="Déconnecter" style={{fontFamily: 'Tauri', fontSize: 16, color: 'white', marginLeft: 10, textAlign: 'center', marginBottom:-10}}>
+                                    {this.props.user.nom}  <br/>
+                                    {this.props.user.prenom}
+                                </p>
+                            </Link>
+                            )
+                        }
+                        
                     </ul>                    
                 </div>
             </nav>
@@ -61,3 +83,17 @@ const styles = {
     }
     
 }
+
+const mapStateToProps = (state) => {
+    return {
+        user : state.userReducer.user
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        save_user : (user) => dispatch(createUser(user))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Navigation)

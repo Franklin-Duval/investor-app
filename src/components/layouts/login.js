@@ -58,15 +58,15 @@ class Login extends React.Component{
         return(
             this.props.user.authentifie && this.props.user.userType === "Admin"
             ?
-            <Redirect to="/admin/dashboard" />
+            <Redirect to="/admin/acceuil" />
             :
-            this.props.user.authentifie && this.props.user.userType === "Utilisateur"
+            this.props.user.authentifie && this.props.user.userType === "Investisseur"
             ?
-            <Redirect to="/user/dashboard" />
+            <Redirect to="/investisseur/acceuil" />
             :
-            this.props.user.authentifie && this.props.user.userType === "Technicien"
+            this.props.user.authentifie && this.props.user.userType === "Porteur Projet"
             ?
-            <Redirect to="/technicien/dashboard" />
+            <Redirect to="/porteur/acceuil" />
             :
             <div className="container-fluid login" >
                 <p style={styles.text}>Connectez-vous à votre compte</p>

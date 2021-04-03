@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom'
 
 import '../../assets/css/header.css'
 import Navigation from '../layouts/navigation_bar'
+import { connect } from 'react-redux'
 
-export class CreerProjet extends Component {
+class CreerProjet extends Component {
     
     state = {
         nom: "",
@@ -172,4 +173,10 @@ const styles = {
     }
 }
 
-export default CreerProjet
+const mapStateToProps = (state) => {
+    return {
+        user : state.userReducer.user
+    }
+}
+
+export default connect(mapStateToProps)(CreerProjet)

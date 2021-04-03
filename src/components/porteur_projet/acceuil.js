@@ -2,14 +2,36 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import ToolkitProvider, { Search, } from 'react-bootstrap-table2-toolkit'
 import BootstrapTable from 'react-bootstrap-table-next'
+import { BeatLoader } from 'react-spinners'
 
+import { API_URL } from '../layouts/constants'
 import '../../assets/css/header.css'
 import Navigation from '../layouts/navigation_bar'
+import { connect } from 'react-redux'
 
 class Acceuil extends Component {
 
     state = {
+        isLoading: true,
         projets: []
+    }
+    
+    componentDidMount(){
+        this.fetchProjet()
+    }
+
+    fetchProjet = () => {
+        fetch(API_URL + 'get-project/' + this.props.user.id + '/')
+        .then((response) => response.json())
+        .then((responseJson) => {
+            console.log(responseJson)
+            if (responseJson.success){
+                this.setState({
+                    projets: responseJson.data,
+                    isLoading: false
+                })
+            }
+        })
     }
     
     render() {
@@ -26,34 +48,43 @@ class Acceuil extends Component {
                     </div>
                 </div>
 
-                <div className="container">
+                <div className="container" style={{paddingBottom: 50}}>
                     <p className="home-title">Mes Projets</p>
-
-                    <ToolkitProvider
-                        keyField="id"
-                        data={this.state.projets}
-                        columns={this.columns}
-                        search
-                    >
-                        {(props) => (
-                            <div>
-                                <div style={{flex: 1, display: 'flex', justifyContent: 'flex-end', marginRight: 30}}>
-                                    
-                                    <SearchBar {...props.searchProps} style={{width: 350, height: 50, fontFamily: 'Tauri'}} placeholder="Rechercher" />
+                    
+                    {
+                        this.state.isLoading
+                        ?
+                        <div style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
+                            <BeatLoader loading={this.state.isLoading} size={20} color="#66bb6a" />
+                        </div>
+                        :
+                        <ToolkitProvider
+                            keyField="id"
+                            data={this.state.projets}
+                            columns={this.columns}
+                            search
+                        >
+                            {(props) => (
+                                <div>
+                                    <div style={{flex: 1, display: 'flex', justifyContent: 'flex-end', marginRight: 30}}>
+                                        
+                                        <SearchBar {...props.searchProps} style={{width: 350, height: 50, fontFamily: 'Tauri'}} placeholder="Rechercher" />
+                                    </div>
+                                    <hr/>
+                                    <BootstrapTable
+                                        hover
+                                        bootstrap4
+                                        {...props.baseProps}
+                                        noDataIndication="Aucun projet n'est enregisté pour l'instant"
+                                        bordered={false}
+                                        rowStyle={{}}
+                                        
+                                    />
                                 </div>
-                                <hr/>
-                                <BootstrapTable
-                                    hover
-                                    bootstrap4
-                                    {...props.baseProps}
-                                    noDataIndication="Aucun projet n'est enregisté pour l'instant"
-                                    bordered={false}
-                                    rowStyle={{}}
-                                    
-                                />
-                            </div>
-                        )}
-                    </ToolkitProvider>
+                            )}
+                        </ToolkitProvider>
+                    }
+                    
                 </div>
             </div>
         )
@@ -152,4 +183,10 @@ const styles = {
     },
 }
 
-export default Acceuil
+const mapStateToProps = (state) => {
+    return {
+        user : state.userReducer.user
+    }
+}
+
+export default connect(mapStateToProps)(Acceuil)

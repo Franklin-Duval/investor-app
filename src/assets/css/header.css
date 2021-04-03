@@ -23,6 +23,13 @@
     text-align: center;
     padding: 7px;
     margin-top: 20px;
+    text-decoration: none;
+}
+
+.head-button:hover{
+    color: #66bb6a;
+    background-color: white;
+    text-decoration: none;
 }
 
 .home-title{

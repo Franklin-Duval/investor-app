@@ -67,7 +67,7 @@
     font-size: 22px;
     color: white;
     background-color: #66bb6a;
-    outline: none;
+    text-decoration: none;
     font-family: Montserrat;
     border: 0px;
     
@@ -77,11 +77,11 @@
     background-color: #eceff1;
     color: #66bb6a;
     border: 2px solid #66bb6a;
-    outline: none;
+    text-decoration: none;
 }
 
 .button:active{
-    outline: none;
+    text-decoration: none;
 }
 
 .dropdown{
@@ -95,26 +95,12 @@
     border-right: 0px;
     border-bottom: 2px solid white;
     margin-bottom: 30px;
-    outline: none;
+    text-decoration: none;
 }
 
 .dropdown:focus{
     color: black;
-    outline: none;
-}
-
-.datepicker{
-    background-color: transparent;
-    color: white;
-    font-size: 20px;
-    width: 450px;
-    height: 45px;
-    border-top: 0px;
-    border-left: 0px;
-    border-right: 0px;
-    border-bottom: 2px solid white;
-    margin-bottom: 30px;
-    outline: none;
+    text-decoration: none;
 }
 
 .slide{

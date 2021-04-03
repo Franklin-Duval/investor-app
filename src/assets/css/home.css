@@ -35,4 +35,11 @@
     font-family: Montserrat;
     border: 2px solid white;
     margin-left: 20%;
+    text-decoration: none;
+}
+
+.top-button:hover{
+    text-decoration: none;
+    color: #6C63FF;
+    background-color: white;
 }
