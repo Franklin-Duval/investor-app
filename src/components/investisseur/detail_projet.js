@@ -59,7 +59,7 @@ class Detail_projet extends Component {
                         <hr/>
                         <div className="row" style={{marginTop: 30}}>
                             <div className="col-md-4" style={{marginBottom: 20}}>
-                                <img src={this.state.projet.image} alt="..." height={300} width={300} />
+                                <img src={this.state.projet.image} alt="..." height={300} width={330} />
                             </div>
                             <div className="col-md-8">
                                 <div className="row">

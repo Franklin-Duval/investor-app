@@ -1,6 +1,7 @@
 import React from 'react'
 import { FiMail, FiLock } from 'react-icons/fi'
 import { Link, Redirect } from 'react-router-dom'
+import { BeatLoader } from 'react-spinners'
 
 import {API_URL} from './constants'
 import '../../assets/css/form.css'
@@ -14,11 +15,12 @@ class Login extends React.Component{
     state = {
         email: "",
         password: "",
-        
+        isLoading: false
     }
 
     handleSubmit = (event) => {
         event.preventDefault()
+        this.setState({isLoading: true})
         fetch(API_URL + 'login/', {
             method: 'POST',
             headers: {
@@ -46,6 +48,7 @@ class Login extends React.Component{
                     email: responseJson.data.email,
                     url: responseJson.data.url
                 })
+                this.setState({isLoading: false})
             }
 
         })
@@ -56,6 +59,12 @@ class Login extends React.Component{
 
     render(){
         return(
+            this.state.isLoading
+            ?
+            <div style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
+                <BeatLoader loading={this.state.isLoading} size={20} color="#66bb6a" />
+            </div>
+            :
             this.props.user.authentifie && this.props.user.userType === "Admin"
             ?
             <Redirect to="/admin/acceuil" />
@@ -80,6 +89,7 @@ class Login extends React.Component{
                             className="text-field" id="email"
                             placeholder="Email"
                             value={this.state.email}
+                            required
                             onChange={(event) => {
                                 this.setState({email: event.target.value})
                             }}
@@ -93,6 +103,7 @@ class Login extends React.Component{
                             className="text-field" id="password"
                             placeholder="Mot de Passe"
                             value={this.state.password}
+                            required
                             onChange={(event) => {
                                 this.setState({password: event.target.value})
                             }}

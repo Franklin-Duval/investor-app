@@ -21,29 +21,30 @@ class Porteur extends React.Component{
         contact: "",
         num_passport: "",
         KBIS: "",
-
+        document: undefined
     }
 
     handleSubmit = (event) => {
         event.preventDefault()
         this.setState({isLoading: true})
-        fetch(API_URL + 'porteur-porteur/', {
+
+        let formData = new FormData()
+        console.log(formData)
+        formData.append("nom", this.state.nom)
+        formData.append("prenom", this.state.prenom)
+        formData.append("email", this.state.email)
+        formData.append("adresse", this.state.adresse)
+        formData.append("contact", this.state.contact)
+        formData.append("password", this.state.password)
+        formData.append("num_passport", this.state.num_passport)
+        formData.append("KBIS", this.state.KBIS)
+        formData.append("depot_KBIS", this.state.document)
+        formData.append("role", "Porteur Projet")
+
+
+        fetch(API_URL + 'porteur-projet/', {
             method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-type': 'application/json'
-            },
-            body: JSON.stringify({
-                nom: this.state.nom,
-                prenom: this.state.prenom,
-                email: this.state.email,
-                adresse: this.state.adresse,
-                contact: this.state.contact,
-                password: this.state.password,
-                role: "Porteur Projet",
-                num_passport: this.state.num_passport,
-                KBIS: this.state.KBIS
-            })
+            body: formData
 
         })
         .then((response) => response.json())
@@ -74,20 +75,20 @@ class Porteur extends React.Component{
             this.state.isLoading
             ?
             <div style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
-                <BeatLoader loading={this.state.isLoading} size={20} color="#ffa000" />
+                <BeatLoader loading={this.state.isLoading} size={20} color="#66bb6a" />
             </div>
             :
             this.props.user.authentifie && this.props.user.userType === "Admin"
             ?
-            <Redirect to="/admin/dashboard" />
+            <Redirect to="/admin/acceuil" />
             :
-            this.props.user.authentifie && this.props.user.userType === "Utilisateur"
+            this.props.user.authentifie && this.props.user.userType === "Investisseur"
             ?
-            <Redirect to="/user/dashboard" />
+            <Redirect to="/investisseur/acceuil" />
             :
-            this.props.user.authentifie && this.props.user.userType === "Technicien"
+            this.props.user.authentifie && this.props.user.userType === "Porteur Projet"
             ?
-            <Redirect to="/technicien/dashboard" />
+            <Redirect to="/porteur/acceuil" />
             :
             <div>
                 <form onSubmit={(event) => this.handleSubmit(event)} >
@@ -99,6 +100,7 @@ class Porteur extends React.Component{
                             className="text-field"
                             placeholder="Nom"
                             value={this.state.nom}
+                            required
                             onChange={(event) => {
                                 this.setState({nom: event.target.value})
                             }}
@@ -112,6 +114,7 @@ class Porteur extends React.Component{
                             className="text-field"
                             placeholder="Prénom"
                             value={this.state.prenom}
+                            required
                             onChange={(event) => {
                                 this.setState({prenom: event.target.value})
                             }}
@@ -125,6 +128,7 @@ class Porteur extends React.Component{
                             className="text-field"
                             placeholder="Email"
                             value={this.state.email}
+                            required
                             onChange={(event) => {
                                 this.setState({email: event.target.value})
                             }}
@@ -138,6 +142,7 @@ class Porteur extends React.Component{
                             className="text-field"
                             placeholder="Adresse"
                             value={this.state.adresse}
+                            required
                             onChange={(event) => {
                                 this.setState({adresse: event.target.value})
                             }}
@@ -151,6 +156,7 @@ class Porteur extends React.Component{
                             className="text-field"
                             placeholder="Contact"
                             value={this.state.contact}
+                            required
                             onChange={(event) => {
                                 this.setState({contact: event.target.value})
                             }}
@@ -164,6 +170,7 @@ class Porteur extends React.Component{
                             className="text-field"
                             placeholder="Mot de Passe"
                             value={this.state.password}
+                            required
                             onChange={(event) => {
                                 this.setState({password: event.target.value})
                             }}
@@ -177,6 +184,7 @@ class Porteur extends React.Component{
                             className="text-field"
                             placeholder="Numéro de Passeport"
                             value={this.state.num_passport}
+                            required
                             onChange={(event) => {
                                 this.setState({num_passport: event.target.value})
                             }}
@@ -190,8 +198,22 @@ class Porteur extends React.Component{
                             className="text-field"
                             placeholder="KBIS"
                             value={this.state.KBIS}
+                            required
                             onChange={(event) => {
                                 this.setState({KBIS: event.target.value})
+                            }}
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label style={styles.label}>Dépot du KBIS</label>
+                        <input 
+                            type="file" 
+                            className="form-control-file"
+                            style={styles.textInput}
+                            required
+                            onChange={(event) => {
+                                this.setState({document: event.target.files[0]})
                             }}
                         />
                     </div>
@@ -202,6 +224,20 @@ class Porteur extends React.Component{
             </div>
         )
     }
+}
+
+const styles = {
+    
+    textInput:{
+        fontFamily: 'Tauri',
+        fontSize: 16,
+        
+    },
+
+    label:{
+        fontFamily: 'Montserrat',
+        fontSize: 16,
+    },
 }
 
 const mapStateToProps = (state) => {

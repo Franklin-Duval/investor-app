@@ -37,6 +37,7 @@ class Investisseur extends React.Component{
                 email: this.state.email,
                 password: this.state.password,
                 contact: this.state.contact,
+                adresse: this.state.adresse,
                 role: "Investisseur",
             })
 
@@ -69,20 +70,20 @@ class Investisseur extends React.Component{
             this.state.isLoading
             ?
             <div style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
-                <BeatLoader loading={this.state.isLoading} size={20} color="#ffa000" />
+                <BeatLoader loading={this.state.isLoading} size={20} color="#66bb6a" />
             </div>
             :
             this.props.user.authentifie && this.props.user.userType === "Admin"
             ?
-            <Redirect to="/admin/dashboard" />
+            <Redirect to="/admin/acceuil" />
             :
-            this.props.user.authentifie && this.props.user.userType === "Utilisateur"
+            this.props.user.authentifie && this.props.user.userType === "Investisseur"
             ?
-            <Redirect to="/user/dashboard" />
+            <Redirect to="/investisseur/acceuil" />
             :
-            this.props.user.authentifie && this.props.user.userType === "Technicien"
+            this.props.user.authentifie && this.props.user.userType === "Porteur Projet"
             ?
-            <Redirect to="/technicien/dashboard" />
+            <Redirect to="/porteur/acceuil" />
             :
             <div >
                 <form onSubmit={(event) => this.handleSubmit(event)} >
@@ -94,6 +95,7 @@ class Investisseur extends React.Component{
                             className="text-field"
                             placeholder="Nom"
                             value={this.state.nom}
+                            required
                             onChange={(event) => {
                                 this.setState({nom: event.target.value})
                             }}
@@ -107,6 +109,7 @@ class Investisseur extends React.Component{
                             className="text-field"
                             placeholder="Prénom"
                             value={this.state.prenom}
+                            required
                             onChange={(event) => {
                                 this.setState({prenom: event.target.value})
                             }}
@@ -120,6 +123,7 @@ class Investisseur extends React.Component{
                             className="text-field"
                             placeholder="Email"
                             value={this.state.email}
+                            required
                             onChange={(event) => {
                                 this.setState({email: event.target.value})
                             }}
@@ -133,6 +137,7 @@ class Investisseur extends React.Component{
                             className="text-field"
                             placeholder="Adresse"
                             value={this.state.adresse}
+                            required
                             onChange={(event) => {
                                 this.setState({adresse: event.target.value})
                             }}
@@ -146,6 +151,7 @@ class Investisseur extends React.Component{
                             className="text-field"
                             placeholder="Contact"
                             value={this.state.contact}
+                            required
                             onChange={(event) => {
                                 this.setState({contact: event.target.value})
                             }}
@@ -159,6 +165,7 @@ class Investisseur extends React.Component{
                             className="text-field"
                             placeholder="Mot de Passe"
                             value={this.state.password}
+                            required
                             onChange={(event) => {
                                 this.setState({password: event.target.value})
                             }}
