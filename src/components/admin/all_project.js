@@ -118,7 +118,8 @@ const styles = {
     headTitle:{
         fontFamily: 'Montserrat',
         fontSize: 45,
-        textAlign: 'center'
+        textAlign: 'center',
+        color: 'white'
     },
 
     text:{

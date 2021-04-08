@@ -37,6 +37,7 @@ class Login extends React.Component{
         .then((responseJson) => {
             if (!responseJson.success){
                 alert(responseJson.message)
+                this.setState({isLoading: false})
             }
             else if (responseJson.success){
                 this.props.save_user({

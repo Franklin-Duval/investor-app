@@ -143,7 +143,7 @@ class CreerProjet extends Component {
                             <div className="form-group">
                                 <label style={styles.label}>Technologie</label>
                                 <select className="form-control" required style={styles.dropDown} onChange={(event) => this.setState({technologie: event.target.value})} >
-                                    <option>---</option>
+                                    <option value={""}>---</option>
                                     {
                                         this.state.technologies.map((item, index) => {
                                             return(
@@ -253,13 +253,15 @@ const styles = {
     headTitle:{
         fontFamily: 'Montserrat',
         fontSize: 45,
-        textAlign: 'center'
+        textAlign: 'center',
+        color: 'white'
     },
 
     headSubtitle:{
         fontFamily: 'Montserrat',
         fontSize: 30,
-        textAlign: 'center'
+        textAlign: 'center',
+        color: 'white'
     },
 
     textInput:{

@@ -173,13 +173,15 @@ const styles = {
     headTitle:{
         fontFamily: 'Montserrat',
         fontSize: 45,
-        textAlign: 'center'
+        textAlign: 'center',
+        color: 'white'
     },
 
     headSubtitle:{
         fontFamily: 'Montserrat',
         fontSize: 30,
-        textAlign: 'center'
+        textAlign: 'center',
+        color: 'white'
     },
 }
 

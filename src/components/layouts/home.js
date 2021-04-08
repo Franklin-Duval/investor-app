@@ -16,11 +16,12 @@ export default class Home extends Component {
                         <div className="row">
                             <div className="col-md-7" style={styles.center}>
                                 <img src={logo} alt="" style={{width: 200, height: 200, borderRadius: 100}} />
-                                <p className="big-title">MY GREENWOOD <br/> SOLUTION </p>
+                                <p className="big-title">MY GREENBOND <br/> SOLUTION </p>
                                 <div style={{paddingLeft: 100, paddingRight: 100}}>
-                                    <p className="sub-title">Greenwood solution est une startup dont l'objectif est de promouvoir l'avancé du numérique.
-                                        Cette plateforme a pour but de permettre a des porteur de projet de présenter leurs projets a des différents investisseurs
-                                        afin d'obtenir des financement et de l'aide.
+                                    <p className="sub-title">
+                                        Greenbond solution est une startup dont l'objectif est de promouvoir l'avancé du numérique.
+                                        Cette plateforme a pour but de permettre à des porteur de projet de présenter leurs projets a 
+                                        des différents investisseurs afin d'obtenir des financement et de l'aide.
                                     </p>
                                 </div>
                                 
