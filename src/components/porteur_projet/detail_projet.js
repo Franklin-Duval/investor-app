@@ -3,7 +3,9 @@ import ToolkitProvider from 'react-bootstrap-table2-toolkit'
 import BootstrapTable from 'react-bootstrap-table-next'
 import { BeatLoader } from 'react-spinners'
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap"
+import DatePicker from "react-datepicker"
 
+import "react-datepicker/dist/react-datepicker.css"
 import Navigation from '../layouts/navigation_bar'
 import '../../assets/css/pages.css'
 import { connect } from 'react-redux'
@@ -12,13 +14,35 @@ import { Redirect } from 'react-router'
 
 class Detail_projet extends Component {
 
+	formatDate = (days, months, years) => {
+		let month = '' + (months + 1)
+		let day = '' + days
+		let year = years
+
+		if (month.length < 2) 
+			month = '0' + month;
+		if (day.length < 2) 
+			day = '0' + day;
+
+		return year + '-' + month + '-' + day
+	}
+
     state = {
         projet: this.props.location.state,
         finish: false,
         taches: [],
         isLoading: true,
         showModal: false,
-        image: null
+        idTache: "",
+        debut: undefined,
+        fin: undefined,
+        avancement: 0,
+        statut: "",
+        image: undefined,
+
+        calendar_debut: null,
+        calendar_fin: null,
+        today: this.formatDate((new Date()).getDate(), (new Date()).getMonth(), (new Date()).getFullYear()),
     }
 
     componentDidMount(){
@@ -39,28 +63,35 @@ class Detail_projet extends Component {
         })
     }
 
-    investir = () => {
-        fetch(API_URL + 'investir-project/', {
+    submitModal = (event) => {
+        event.preventDefault()
+        this.setState({
+            isLoading: true,
+            showModal: !this.state.showModal
+        })
+
+        let formData = new FormData()
+        formData.append("id", this.state.idTache)
+        formData.append("debut", this.state.debut)
+        formData.append("fin", this.state.fin)
+        formData.append("avancement", this.state.avancement)
+        formData.append("statut", this.state.statut)
+        formData.append("image", this.state.image)
+
+
+        fetch(API_URL + 'update-tache/', {
             method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-type': 'application/json'
-            },
-            body: JSON.stringify({
-                investisseur: this.props.user.id,
-                projet: this.state.projet.id,
-            })
+            body: formData
 
         })
         .then((response) => response.json())
         .then((responseJson) => {
-            if (responseJson.success){
-                this.setState({finish: true})
-            }
-
+            console.log(responseJson)
+            this.fetchTache()
         })
         .catch((error) =>{
             console.log(error)
+            this.setState({isLoading:false})
         })
     }
 
@@ -92,13 +123,9 @@ class Detail_projet extends Component {
                                 <img src={this.state.projet.image} alt="..." height={300} width={330} />
                             </div>
                             <div className="col-md-8">
-                                <div className="row">
-                                    <a href={this.state.projet.document} className="detail-button">Télécharger le document</a>
-                                    <button type="submit" className="button" onClick={() => this.investir()} >Investir</button>
-                                </div>
                                 <div style={{marginTop: 30, marginLeft: -15}}>
-                                    <p style={{fontFamily: 'Montserrat'}}>Autheur : <span style={{fontWeight: 'bold', fontSize: 25}}>{this.state.projet.porteur} </span> </p>
-                                    <p style={{fontFamily: 'Montserrat'}}>{this.state.projet.description} </p>
+                                    <p style={{fontFamily: 'Montserrat'}}>Autheur : <span style={{fontWeight: 'bold', fontSize: 25}}>{this.props.user.nom} {this.props.user.prenom}</span> </p>
+                                    <p style={{fontFamily: 'Montserrat'}}>Description : {this.state.projet.description} </p>
                                 </div>
                                 
                             </div>
@@ -155,16 +182,94 @@ class Detail_projet extends Component {
                 </div>
 
                 <Modal isOpen={this.state.showModal} toggle={() => this.setState({showModal: !this.state.showModal})}>
-                    <ModalHeader>Image</ModalHeader>
+                    <ModalHeader>Modifier la Tache</ModalHeader>
                     <ModalBody>
-                        {
-                            this.state.image
-                            ?
-                            <img src={this.state.image} className="card-img-top" alt="..." height={300} />
-                            :
-                            <p>Aucune image de cette tache n'est disponible</p>
-                        }
-                        
+
+                        <form style={{padding: 50}} onSubmit={(event) => this.submitModal(event)} >
+                            
+                            <div className="form-group">
+                                <label style={styles.label}>Début</label>
+                                <DatePicker
+                                    className="form-control"									
+                                    dateFormat="yyyy-MM-dd"
+                                    selected={this.state.calendar_debut}
+                                    showYearDropdown
+                                    scrollableYearDropdown
+                                    showMonthDropdown
+                                    scrollableMonthYearDropdown
+                                    placeholderText="Date de début"
+                                    onChange={(date) => {
+                                        this.setState({
+                                            calendar_debut: date,
+                                            debut: this.formatDate(date.getDate(), date.getMonth(), date.getFullYear())
+                                        })
+                                    
+                                    }}
+                                />
+                            </div>
+                            
+                            <div className="form-group">
+                                <label style={styles.label}>Fin</label>
+                                <DatePicker
+                                    className="form-control"									
+                                    dateFormat="yyyy-MM-dd"
+                                    selected={this.state.calendar_fin}
+                                    showYearDropdown
+                                    scrollableYearDropdown
+                                    showMonthDropdown
+                                    scrollableMonthYearDropdown
+                                    placeholderText="Date de Fin"
+                                    onChange={(date) => {
+                                        this.setState({
+                                            calendar_fin: date,
+                                            fin: this.formatDate(date.getDate(), date.getMonth(), date.getFullYear())
+                                        })
+                                    
+                                    }}
+                                />
+                            </div>
+                            
+                            <div className="form-group">
+                                <label style={styles.label}>Etat d'avancement (%)</label>
+                                <input 
+                                    type="number"
+                                    className="form-control"
+                                    placeholder="Avancement"
+                                    value={this.state.avancement}
+                                    style={styles.textInput}
+                                    onChange={(event) => {
+                                        this.setState({avancement: event.target.value})
+                                    }}
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label style={styles.label}>Statut</label>
+                                <select className="form-control" style={styles.dropDown} onChange={(event) => this.setState({statut: event.target.value})} >
+                                    <option value="En attente">En attente</option>
+                                    <option value="En cours">En cours</option>
+                                    <option value="Terminé">Terminé</option>
+                                </select>
+                            </div>
+
+                            <div className="form-group">
+                                <label style={styles.label}>Image</label>
+                                <input 
+                                    type="file" 
+                                    className="form-control-file"
+                                    style={styles.textInput}
+                                    onChange={(event) => {
+                                        console.log(event.target.files[0])
+                                        this.setState({image: event.target.files[0]})
+                                    }}
+                                />
+                            </div>
+
+                            <div style={{marginTop: 30, display: 'flex', justifyContent: 'center'}}>
+                                <button type="submit" className="button" >Valider</button>
+                            </div>
+
+                        </form>
                         
                     </ModalBody>
                     <ModalFooter>
@@ -190,10 +295,40 @@ class Detail_projet extends Component {
         },
     }
 
+    etatFormatter = (cell, row) => {
+        if (row.statut === "En cours"){
+            return(
+                <span>
+                    <strong style={{color: 'green', fontSize: 18}}>{cell}</strong>
+                </span>
+            )
+        }
+        else if (row.statut === "Terminé"){
+            return(
+                <span>
+                    <strong style={{color: 'red', fontSize: 18}}>{cell}</strong>
+                </span>
+            )
+        }
+        else{
+            return(
+                <span style={{color: '#03a9f4', fontSize: 18}}>
+                    {cell}
+                </span>
+            )
+        }
+    }
+
     rowEvent = {
         onClick: (e, row, rowIndex) => {
             this.setState({
-                image: row.image,
+                idTache: row.id,
+                avancement: row.avancement,
+                statut: row.statut,
+                debut: row.debut,
+                fin: row.fin,
+                calendar_debut: new Date(row.debut ? row.debut : this.state.today),
+                calendar_fin: new Date(row.fin ? row.fin : this.state.today),
                 showModal: true
             })    
         }
@@ -228,30 +363,6 @@ class Detail_projet extends Component {
             return(
                 <span>
                     Non défini
-                </span>
-            )
-        }
-    }
-
-    etatFormatter = (cell, row) => {
-        if (row.statut === "En cours"){
-            return(
-                <span>
-                    <strong style={{color: 'green', fontSize: 18}}>{cell}</strong>
-                </span>
-            )
-        }
-        else if (row.statut === "Terminé"){
-            return(
-                <span>
-                    <strong style={{color: 'red', fontSize: 18}}>{cell}</strong>
-                </span>
-            )
-        }
-        else{
-            return(
-                <span style={{color: '#03a9f4', fontSize: 18}}>
-                    {cell}
                 </span>
             )
         }
@@ -342,6 +453,17 @@ const styles = {
         textDecoration: 'underline'
     },
 
+    textInput:{
+        fontFamily: 'Tauri',
+        fontSize: 16,
+        
+    },
+
+    label:{
+        fontFamily: 'Montserrat',
+        fontSize: 16,
+        display: 'block'
+    },
     
 }
 

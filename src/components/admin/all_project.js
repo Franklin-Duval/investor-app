@@ -63,7 +63,6 @@ class All_project extends Component {
                             this.state.projets.map((item, index) => {
                                 return (
                                     <div key={index} className="card" style={{width: '20rem', margin: 10}}>
-                                        <img src={item.image} className="card-img-top" alt="..." height={200} />
                                         <div className="card-body">
                                             <h5 className="card-title" style={styles.text} >{item.nom} </h5>
                                             <p className="card-text" style={{minHeight: 100}} >{item.description.substring(0, 130)}... </p>

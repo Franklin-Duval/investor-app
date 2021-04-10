@@ -15,7 +15,7 @@ import InvestisseurRoutes from './components/investisseur/routes'
 
 
 function App(props) {
-	console.log(props.user.id)
+	console.log(props.path)
 	return (
 		<BrowserRouter>
 			<Switch>

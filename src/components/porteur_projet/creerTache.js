@@ -1,24 +1,21 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 import ToolkitProvider from 'react-bootstrap-table2-toolkit'
 import BootstrapTable from 'react-bootstrap-table-next'
 import { BeatLoader } from 'react-spinners'
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap"
 
-import Navigation from '../layouts/navigation_bar'
-import '../../assets/css/pages.css'
-import { connect } from 'react-redux'
 import { API_URL } from '../layouts/constants'
-import { Redirect } from 'react-router'
+import Navigation from '../layouts/navigation_bar'
 
-class Detail_projet extends Component {
+class CreerTache extends Component {
 
     state = {
         projet: this.props.location.state,
-        finish: false,
         taches: [],
         isLoading: true,
-        showModal: false,
-        image: null
+        nom: "",
+        duree: 0
     }
 
     componentDidMount(){
@@ -39,25 +36,28 @@ class Detail_projet extends Component {
         })
     }
 
-    investir = () => {
-        fetch(API_URL + 'investir-project/', {
+    submitForm = (event) => {
+        event.preventDefault()
+        this.setState({isLoading: true})
+
+        fetch(API_URL + 'tache/', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-type': 'application/json'
             },
             body: JSON.stringify({
-                investisseur: this.props.user.id,
-                projet: this.state.projet.id,
+                nom: this.state.nom,
+                projet: this.state.projet.url,
+                duree: this.state.duree
             })
 
         })
         .then((response) => response.json())
         .then((responseJson) => {
-            if (responseJson.success){
-                this.setState({finish: true})
-            }
-
+            this.setState({isLoading: false})
+            console.log(responseJson)
+            this.fetchTache()
         })
         .catch((error) =>{
             console.log(error)
@@ -65,68 +65,69 @@ class Detail_projet extends Component {
     }
 
     render() {
-        return (this.state.finish
-            ?
-            <Redirect to="/investisseur/acceuil" />
-            :
+        return (
             <div>
                 <Navigation />
-
-                <div className="top-header-investor">
+                <div className="top-header">
                     <div style={styles.headBox}>
-                        <p style={styles.headTitle}>Devenez vous aussi un investisseur d'un projet innovant.</p>
+                        <p style={styles.headTitle}>Avez-vous une idée de projet ?</p>
+                        <p style={styles.headSubtitle}>Devenez vous aussi un porteur de projet innovant afin d'obtenir des financements.</p>
 
+                        <Link className="head-button" to="/porteur/creer-projet">Créer un Projet</Link>
                     </div>
                 </div>
 
-                <div className="container" style={{paddingBottom: 50}}>
-                    <p className="home-title">Détail du Projet</p>
+                <div className="container">
+                    <p className="home-title">Création des Taches</p>
 
-                    <h1 className="text-center">{this.state.projet.nom} </h1>
-
-                    <hr/>
-
-                    <div className="box">
-                        <div className="row" style={{padding: 20, marginTop: 30}}>
-                            <div className="col-md-4" style={{marginBottom: 20}}>
-                                <img src={this.state.projet.image} alt="..." height={300} width={330} />
-                            </div>
-                            <div className="col-md-8">
-                                <div className="row">
-                                    <a href={this.state.projet.document} className="detail-button">Télécharger le document</a>
-                                    <button type="submit" className="button" onClick={() => this.investir()} >Investir</button>
-                                </div>
-                                <div style={{marginTop: 30, marginLeft: -15}}>
-                                    <p style={{fontFamily: 'Montserrat'}}>Autheur : <span style={{fontWeight: 'bold', fontSize: 25}}>{this.state.projet.porteur} </span> </p>
-                                    <p style={{fontFamily: 'Montserrat'}}>{this.state.projet.description} </p>
-                                </div>
-                                
-                            </div>
+                    {
+                        this.state.isLoading
+                        ?
+                        <div style={{display: 'flex',  justifyContent:'center', alignItems:'center', paddingBottom: 50}}>
+                            <BeatLoader loading={this.state.isLoading} size={20} color="#66bb6a" />
                         </div>
+                        :
+                        <div>
+                            <p>Renseigner les taches ou étapes de votre projet</p>
+                            <p style={styles.exemple}>Exemple : "Mise en place du système électrique ;  durée : 5 jours</p>
 
-                        <p style={styles.text}>Statut : <span style={{
-                                                    color: this.state.projet.statut === "En attente de validation" ? 'blueviolet':
-                                                    this.state.projet.statut === "En attente de financement" ? '#ffa000' :
-                                                    this.state.projet.statut === "Financé" ? 'green' : 'red',
+                            <form style={{padding: 50}} onSubmit={(event) => this.submitForm(event)} >
+                                <div className="form-group">
+                                    <label style={styles.label}>Nom</label>
+                                    <input 
+                                        type="text" 
+                                        className="form-control"
+                                        placeholder="Nom de la tache"
+                                        value={this.state.nom}
+                                        style={styles.textInput}
+                                        required
+                                        onChange={(event) => {
+                                            this.setState({nom: event.target.value})
+                                        }}
+                                    />
+                                </div>
 
-                                                    fontWeight: 'bold',
-                                                }}> {this.state.projet.statut}</span> </p>
+                                <div className="form-group">
+                                    <label style={styles.label}>Durée de la tache (jours)</label>
+                                    <input 
+                                        type="number" 
+                                        className="form-control"
+                                        placeholder="Durée"
+                                        value={this.state.duree}
+                                        style={styles.textInput}
+                                        required
+                                        onChange={(event) => {
+                                            this.setState({duree: event.target.value})
+                                        }}
+                                    />
+                                </div>
 
-                        <p style={styles.text}>Technologie : {this.state.projet.technologie} </p>
-                        <p style={styles.text}>Durée : {this.state.projet.duree} mois </p>
-                        <p style={styles.text}>Montant : {this.state.projet.montant} FCFA</p>
+                                <div style={{marginTop: 30, display: 'flex', justifyContent: 'center'}}>
+                                    <button type="submit" className="button" >Valider</button>
+                                </div>
 
-                        <hr/>
+                            </form>
 
-                        <p style={styles.textTache}>Taches</p>
-
-                        {
-                            this.state.isLoading
-                            ?
-                            <div style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
-                                <BeatLoader loading={this.state.isLoading} size={20} color="#66bb6a" />
-                            </div>
-                            :
                             <ToolkitProvider
                                 keyField="id"
                                 data={this.state.taches}
@@ -148,12 +149,17 @@ class Detail_projet extends Component {
                                     </div>
                                 )}
                             </ToolkitProvider>
-                        }
-                
-                    </div>
+
+                            <div style={{display: 'flex',  justifyContent:'center', alignItems:'center', paddingBottom: 50}}>
+                                <Link to="/porteur/acceuil" className="terminer" >Terminer</Link>
+                            </div>
+
+                        </div>
+                                                
+                    }
                     
                 </div>
-
+                
                 <Modal isOpen={this.state.showModal} toggle={() => this.setState({showModal: !this.state.showModal})}>
                     <ModalHeader>Image</ModalHeader>
                     <ModalBody>
@@ -171,6 +177,7 @@ class Detail_projet extends Component {
                         <Button color="primary" onClick={() => this.setState({showModal: !this.state.showModal})}>Fermer</Button>
                     </ModalFooter>
                 </Modal>
+
             </div>
         )
     }
@@ -233,30 +240,6 @@ class Detail_projet extends Component {
         }
     }
 
-    etatFormatter = (cell, row) => {
-        if (row.statut === "En cours"){
-            return(
-                <span>
-                    <strong style={{color: 'green', fontSize: 18}}>{cell}</strong>
-                </span>
-            )
-        }
-        else if (row.statut === "Terminé"){
-            return(
-                <span>
-                    <strong style={{color: 'red', fontSize: 18}}>{cell}</strong>
-                </span>
-            )
-        }
-        else{
-            return(
-                <span style={{color: '#03a9f4', fontSize: 18}}>
-                    {cell}
-                </span>
-            )
-        }
-    }
-
     columns = [
         {
             dataField: 'nom',
@@ -278,7 +261,6 @@ class Detail_projet extends Component {
             dataField: 'statut',
             text: 'Statut',
             sort: true,
-            formatter: this.etatFormatter,
             headerStyle: this.styles.header,
             headerSortingStyle: this.styles.headerSort
         },
@@ -330,25 +312,32 @@ const styles = {
         color: 'white'
     },
 
-    text:{
+    headSubtitle:{
         fontFamily: 'Montserrat',
-        fontSize: 18
-    },
-
-    textTache:{
-        fontFamily: 'Tauri',
-        fontSize: 22,
+        fontSize: 30,
         textAlign: 'center',
-        textDecoration: 'underline'
+        color: 'white'
     },
 
-    
-}
+    textInput:{
+        fontFamily: 'Tauri',
+        fontSize: 16,
+        
+    },
 
-const mapStateToProps = (state) => {
-    return {
-        user : state.userReducer.user
+    label:{
+        fontFamily: 'Montserrat',
+        fontSize: 16,
+    },
+
+    exemple:{
+        fontStyle: 'italic',
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#777',
+        marginTop: -10
     }
+
 }
 
-export default connect(mapStateToProps)(Detail_projet)
+export default CreerTache

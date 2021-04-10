@@ -13,7 +13,8 @@ class Acceuil extends Component {
 
     state = {
         isLoading: true,
-        projets: []
+        projets: [],
+        selectedRow: {}
     }
     
     componentDidMount(){
@@ -67,7 +68,16 @@ class Acceuil extends Component {
                             {(props) => (
                                 <div>
                                     <div style={{flex: 1, display: 'flex', justifyContent: 'flex-end', marginRight: 30}}>
-                                        
+                                        <Link
+                                            className="detail"
+                                            to={{
+                                                pathname: "/porteur/detail-projet",
+                                                state: this.state.selectedRow
+                                            }}
+                                        >
+                                            Détails
+                                        </Link>
+
                                         <SearchBar {...props.searchProps} style={{width: 350, height: 50, fontFamily: 'Tauri'}} placeholder="Rechercher" />
                                     </div>
                                     <hr/>
@@ -75,6 +85,7 @@ class Acceuil extends Component {
                                         hover
                                         bootstrap4
                                         {...props.baseProps}
+                                        selectRow={this.selectRow}
                                         noDataIndication="Aucun projet n'est enregisté pour l'instant"
                                         bordered={false}
                                         rowStyle={{}}
@@ -90,6 +101,17 @@ class Acceuil extends Component {
         )
     }
 
+    selectRow = {
+        mode: 'radio',
+        clickToSelect: true,
+        style: {
+            backgroundColor: '#e8f5e9',
+        },
+        onSelect: (row) => {
+            this.setState({selectedRow: row})
+            console.log("selected", row)
+        }
+    }
     
     styles = {
         header:{
@@ -135,7 +157,6 @@ class Acceuil extends Component {
             dataField: 'montant',
             text: 'Montant',
             sort: true,
-            formatter: this.priorityFormatter,
             headerStyle: this.styles.header,
             headerSortingStyle: this.styles.headerSort
         },
@@ -144,7 +165,6 @@ class Acceuil extends Component {
             dataField: 'duree',
             text: 'Durée (mois)',
             sort: true,
-            formatter: this.etatFormatter,
             headerStyle: this.styles.header,
             headerSortingStyle: this.styles.headerSort
         },

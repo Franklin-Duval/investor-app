@@ -14,7 +14,7 @@ class Navigation extends React.Component{
             <nav className="navbar sticky-top navbar-expand-lg navbar-dark bg-primary">
                 <Link to="/" className="row" style={{textDecoration: 'none'}}>
                     <img src={logo} alt="logo" style={styles.image} />
-                    <p style={styles.text} >Greenwood Solution</p>
+                    <p style={styles.text} >Greenbond Solution</p>
                 </Link>
                 
                 <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navmenu" aria-controls="navmenu" aria-expanded="false" aria-label="Toggle navigation">

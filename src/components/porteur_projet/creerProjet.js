@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { BeatLoader } from 'react-spinners'
-import { Redirect } from 'react-router'
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap"
 
 import '../../assets/css/header.css'
@@ -24,7 +23,8 @@ class CreerProjet extends Component {
         isLoading: true,
         finish: false,
         showModal: false,
-        message: ""
+        message: "",
+        projet: {},
     }
 
     componentDidMount(){
@@ -45,6 +45,7 @@ class CreerProjet extends Component {
 
     submitForm = (event) => {
         event.preventDefault()
+        this.setState({isLoading: true})
 
         let formData = new FormData()
         formData.append("nom", this.state.nom)
@@ -66,6 +67,8 @@ class CreerProjet extends Component {
         .then((responseJson) => {
             if (responseJson.success){
                 this.setState({
+                    projet: responseJson.data,
+                    isLoading: false,
                     finish: true
                 })
             }
@@ -84,10 +87,6 @@ class CreerProjet extends Component {
     
     render() {
         return (
-            this.state.finish
-            ?
-            <Redirect to="/porteur/acceuil" />
-            :
             <div>
                 <Navigation />
                 <div className="top-header">
@@ -106,6 +105,20 @@ class CreerProjet extends Component {
                         ?
                         <div style={{display: 'flex',  justifyContent:'center', alignItems:'center', paddingBottom: 50}}>
                             <BeatLoader loading={this.state.isLoading} size={20} color="#66bb6a" />
+                        </div>
+                        :
+                        this.state.finish
+                        ?
+                        <div style={{display: 'flex',  justifyContent:'center', alignItems:'center', paddingBottom: 50}}>
+                            <Link
+                                className="head-button"
+                                to={{
+                                    pathname: "/porteur/creer-tache",
+                                    state: this.state.projet
+                                }}
+                            >
+                                Continuer
+                            </Link>
                         </div>
                         :
                         <form style={{padding: 50}} onSubmit={(event) => this.submitForm(event)} >
@@ -187,7 +200,7 @@ class CreerProjet extends Component {
                             </div>
                             
                             <div className="form-group">
-                                <label style={styles.label}>Document du Projet</label>
+                                <label style={styles.label}>Business Plan</label>
                                 <input 
                                     type="file" 
                                     className="form-control-file"

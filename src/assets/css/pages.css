@@ -49,3 +49,47 @@
     padding: 10px;
     box-shadow: 2px 1px 2px 2px #cecece;
 }
+
+.terminer{
+    background-color: #6C63FF;
+    border-radius: 5px;
+    padding: 15px;
+    padding-right: 40px;
+    padding-left: 40px;
+    color: white;
+    font-size: 22px;
+    font-family: Montserrat;
+    border: 2px solid white;
+    text-decoration: none;
+    margin-top: 20px;
+}
+
+.terminer:hover{
+    text-decoration: none;
+    color: #6C63FF;
+    background-color: white;
+    border: 3px solid #6C63FF;
+
+}
+
+.detail{
+    height: 50px;
+    width: 150px;
+    border-radius: 5px;
+    font-size: 22px;
+    color: #6C63FF;
+    background-color: white;
+    font-family: Montserrat;
+    border: 2px solid #6C63FF;
+    margin-bottom: 10px;
+    margin-right: 30px;
+    text-align: center;
+    padding: 7px;
+    text-decoration: none;
+}
+
+.detail:hover{
+    background-color: #6C63FF;
+    color: white;
+    text-decoration: none;
+}
