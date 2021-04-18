@@ -213,7 +213,7 @@ class CreerProjet extends Component {
                                 />
                             </div>
                             
-                            <div className="form-group">
+                            {/* <div className="form-group">
                                 <label style={styles.label}>Image descriptif du Projet</label>
                                 <input 
                                     type="file" 
@@ -225,7 +225,7 @@ class CreerProjet extends Component {
                                         this.setState({image: event.target.files[0]})
                                     }}
                                 />
-                            </div>
+                            </div> */}
                             
                             <div style={{marginTop: 30, display: 'flex', justifyContent: 'center'}}>
                                 <button type="submit" className="button" >Valider</button>
